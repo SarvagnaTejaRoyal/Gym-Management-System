@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="navstyles.css" />
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <span>☕︎ GymVerse</span>
+    </div>
+    <ul class="nav-links">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+      <li><a href="admin.html" class="nav-link active"><i class="fas fa-user"></i> ADD MEMBERS</a></li>
+      <li><a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> NOTIFICATIONS</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>👤 Add New Member</h2>
+    <form id="addMemberForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email Address" required />
+      <div class="fee-select">
+
+      <select id="fee" required>
+  <option value="">-- Select Fee Package --</option>
+  <option value="₹999/month">₹999 – 1 Month</option>
+  <option value="₹2500/3 months">₹2500 – 3 Months</option>
+  <option value="₹5500/6 months">₹5500 – 6 Months</option>
+  <option value="₹10000/yearly">₹10000 – 1 Year</option>
+</select>
+</div>
+
+      <input type="date" id="dueDate" required />
+<div class="button-container">
+  <button id="submit">Add Member</button>
+  <button id="reset">Reset</button>
+</div>
+ 
+    </form>
+
+    <h2 style="margin-top: 40px;">📋 All Members</h2>
+    <ul id="memberList" class="list"></ul>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script src="firebase-config.js"></script>
+
+  <!-- Admin Logic -->
+  <script>
+    const db = firebase.database();
+    const form = document.getElementById("addMemberForm");
+    const list = document.getElementById("memberList");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const member = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        fee: document.getElementById("fee").value,
+        dueDate: document.getElementById("dueDate").value
+      };
+      db.ref("members").push({ name, email, fee, dueDate });
+      form.reset();
+    });
+
+    db.ref("members").on("value", (snapshot) => {
+      list.innerHTML = "";
+      snapshot.forEach((child) => {
+        const m = child.val();
+        list.innerHTML += `
+          <li class="card">
+            <strong>${m.name}</strong><br>
+            ${m.email}<br>
+            ${m.fee}<br>
+            Due: ${m.dueDate}<br>
+            <button class="delete-btn" onclick="deleteMember('${child.key}')">🗑 Delete</button>
+          </li>`;
+      });
+    });
+
+    function deleteMember(id) {
+      db.ref("members/" + id).remove();
+    }
+  </script>
+
+</body>
+</html>

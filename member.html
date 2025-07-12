@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Member Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="navstyles.css" />
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <span>☕︎ GymVerse</span>
+    </div>
+    <ul class="nav-links">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+      <li><a href="member.html" class="nav-link active"><i class="fas fa-user"></i> MEMBERS</a></li>
+      <li><a href="supplements.html" class="nav-link"><i class="fas fa-capsules"></i> SUPPLEMENTS</a></li>
+      <li><a href="diet.html" class="nav-link"><i class="fas fa-carrot"></i> DIET PLANS</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1>📅 Your Bills & Due Dates</h1>
+    <ul id="billList" class="list"></ul>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script src="firebase-config.js"></script>
+
+  <!-- Member Logic -->
+  <script>
+    const db = firebase.database();
+    const list = document.getElementById("billList");
+
+    db.ref("members").on("value", (snapshot) => {
+      list.innerHTML = "";
+      snapshot.forEach((child) => {
+        const m = child.val();
+        const due = new Date(m.dueDate).getTime();
+        const now = new Date().getTime();
+        const daysLeft = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+        const countdown = daysLeft > 0 ? `${daysLeft} day(s) left` : "⚠️ Due!";
+
+        list.innerHTML += `
+          <li class="card">
+            <strong>${m.name}</strong><br>
+            Fee: ${m.fee}<br>
+            Due Date: ${m.dueDate}<br>
+            <span style="color:${daysLeft > 0 ? 'green' : 'red'}">⏳ ${countdown}</span>
+          </li>`;
+      });
+    });
+  </script>
+
+</body>
+</html>
