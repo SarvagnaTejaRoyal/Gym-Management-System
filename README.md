@@ -6,36 +6,31 @@ This is a web-based Gym Management System that allows users to manage gym-relate
 
 * Firebase-based login system
 * Admin and member dashboard
-* Diet plans and workout routines
+* Diet plans 
 * Supplement suggestions
 
 ## Admin Credentials
 
-* **Email:** [admin@gmail.com](mailto:admin@gmail.com)
-* **Password:** admin123
+* Email: [admin@gmail.com](mailto:admin@gmail.com)
+* Password: admin123
 
 ## Member Credentials
 
-* **Email:** [member@gmail.com](mailto:member@gmail.com)
-* **Password:** member123
+* Email: [member@gmail.com](mailto:member@gmail.com)
+* Password: member123
 
 ## Setup Instructions
 
-1. **Clone or Download the Repository**
+1. Download the Repository
+  
+2. Unzip the project folder if you downloaded the zip.
 
-   * Unzip the project folder if you downloaded the zip.
+3. Update firebase-config.js with your Firebase project's configuration.
 
-2. **Configure Firebase**
-
-   * Update `firebase-config.js` with your Firebase project's configuration.
-
-3. **Open in Browser**
-
-   * Open `index.html` in your browser to get started.
+4. Open index.html in your browser to get started.
 
 ## File Structure
 
-```
 Gym-Management-System/
 ├── admin.html
 ├── diet.html
@@ -44,15 +39,12 @@ Gym-Management-System/
 ├── login.html
 ├── member.html
 ├── style.css
-├── images and assets...
-```
+├── images and
 
 ## Technologies Used
 
 * HTML5, CSS3, JavaScript
 * Firebase Authentication
 * Firebase Store
-
-## License
-
-This project is for educational purposes only.
+  
+* Prepared By J Sarvagna
