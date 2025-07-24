@@ -29,18 +29,6 @@ This is a web-based Gym Management System that allows users to manage gym-relate
 
 4. Open index.html in your browser to get started.
 
-## File Structure
-
-Gym-Management-System/
-├── admin.html
-├── diet.html
-├── firebase-config.js
-├── index.html
-├── login.html
-├── member.html
-├── style.css
-├── images and
-
 ## Technologies Used
 
 * HTML5, CSS3, JavaScript
