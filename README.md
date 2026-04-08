@@ -151,27 +151,41 @@ service cloud.firestore {
 Click Publish
 ---
 
-## 7️ Firebase Configuration
+## 7️ Firebase Configuration (firebase-config.js)
 
-Update `firebase-config.js` with your project config.
+Where to get it:
 
-Example:
+1.Go to Firebase Console
+2.Open your project
+3.Click ⚙️ Project Settings
+4.Scroll to Your Apps
+5.Click Web App (</>)
+6.Copy the config
 
-```javascript
-const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  databaseURL: "...",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
-};
-
-firebase.initializeApp(firebaseConfig);
+Add in firebase-config.js
 ```
----
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXXXXX",
+  appId: "XXXXXXX",
+  measurementId: "XXXXXXX"
+};
+firebase.initializeApp(firebaseConfig);
+ ```
+ Note:
+```This project uses Firebase v8 (CDN version)```
 
+So use:
+```firebase.initializeApp(firebaseConfig);```
+
+NOT:
+```initializeApp(firebaseConfig); ```
+
+---
 ## Common Errors & Fixes
 
 ### ❌ Error: "Missing or insufficient permissions"
