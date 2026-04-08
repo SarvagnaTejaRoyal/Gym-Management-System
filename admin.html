@@ -38,11 +38,10 @@
   <option value="₹10000/yearly">₹10000 – 1 Year</option>
 </select>
 </div>
-
       <input type="date" id="dueDate" required />
 <div class="button-container">
-  <button id="submit">Add Member</button>
-  <button id="reset">Reset</button>
+  <button type="submit" id="submit">Add Member</button>
+  <button type="reset" id="reset">Reset</button>
 </div>
  
     </form>
@@ -72,7 +71,7 @@
         fee: document.getElementById("fee").value,
         dueDate: document.getElementById("dueDate").value
       };
-      db.ref("members").push({ name, email, fee, dueDate });
+      db.ref("members").push(member);
       form.reset();
     });
 
