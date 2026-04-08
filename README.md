@@ -1,38 +1,253 @@
 # Gym Management System
 
-This is a web-based Gym Management System that allows users to manage gym-related functionalities such as diet plans, supplements, and user logins using Firebase authentication.
+This is a web-based Gym Management System using **Firebase Authentication + Firestore + Realtime Database**.
+---
 
-## Features
+## KEY Features
 
-* Firebase-based login system
-* Admin and member dashboard
-* Diet plans 
-* Supplement suggestions
+* Firebase Authentication (Admin & Member login)
+* Role-based access (admin / member)
+* Admin dashboard (add members, notifications)
+* Member dashboard (view dues)
+* Diet plans & supplements
 
-## Admin Credentials
+---
 
+## Default Credentials
+
+* **Admin**
+
+  * Email: admin@gmail.com
+  * Password: admin123
+
+* **Member**
+
+  * Email: member@gmail.com
+  * Password: member123
+---
+
+# ⚙️ Firebase Setup (VERY IMPORTANT)
+
+Follow these steps correctly to avoid login errors.
+---
+
+## 1️ Enable Authentication (Email/Password)
+
+1. Go to **Firebase Console**
+2. Open your project
+3. Go to:
+   ```
+   Authentication → Sign-in method
+   ```
+4. Enable:
+   ✔ Email/Password
+---
+
+## 2️ Create Users in Authentication
+
+Go to:
+```
+Authentication → Users → Add User
+```
+
+Create:
+
+### Admin User :
 * Email: [admin@gmail.com](mailto:admin@gmail.com)
 * Password: admin123
 
-## Member Credentials
-
+### Member User :
 * Email: [member@gmail.com](mailto:member@gmail.com)
 * Password: member123
 
-## Setup Instructions
+IMPORTANT:
+After creating users, copy their **User UID**.
+---
 
-1. Download the Repository
-  
-2. Unzip the project folder if you downloaded the zip.
+## 3️ Create Firestore Database
 
-3. Update firebase-config.js with your Firebase project's configuration.
+Go to:
 
-4. Open index.html in your browser to get started.
+```
+Firestore Database → Create Database
+```
+* Start in **Test mode (for development)** OR
+* Use rules provided below
+---
 
-## Technologies Used
+## 4️ Create `users` Collection
 
-* HTML5, CSS3, JavaScript
-* Firebase Authentication
-* Firebase Store
-  
-* Prepared By J Sarvagna
+Go to:
+```
+Firestore → Start Collection
+```
+
+Collection name:
+```
+users
+```
+
+## 5️ Create Documents with Correct UID
+
+⚠️ THIS IS THE MOST IMPORTANT STEP
+
+For each user:
+
+### Admin Document
+
+* Click **Add Document**
+* Document ID = **Admin UID (from Authentication)**
+* Add field:
+
+| Field | Type   | Value |
+| ----- | ------ | ----- |
+| role  | string | admin |
+
+---
+
+### Member Document
+
+* Click **Add Document**
+* Document ID = **Member UID (from Authentication)**
+* Add field:
+
+| Field | Type   | Value  |
+| ----- | ------ | ------ |
+| role  | string | member |
+
+---
+
+### Final Structure
+
+```
+users
+   admin_uid_from_auth
+      role: "admin"
+
+   member_uid_from_auth
+      role: "member"
+```
+
+## 6️ Firestore Security Rules
+
+Go to:
+```
+Firestore → Rules
+```
+Replace with:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+  }
+}
+```
+Click Publish
+---
+
+## 7️ Firebase Configuration
+
+Update `firebase-config.js` with your project config.
+
+Example:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  databaseURL: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};
+
+firebase.initializeApp(firebaseConfig);
+```
+---
+
+## Common Errors & Fixes
+
+### ❌ Error: "Missing or insufficient permissions"
+
+✔ Fix:
+
+* Check Firestore rules
+* Make sure user is logged in
+
+---
+
+### ❌ Error: "No role found for this user"
+
+✔ Fix:
+
+* Ensure document exists in `users` collection
+* Document ID must equal **User UID**
+
+---
+
+### ❌ Login not redirecting
+
+✔ Fix:
+
+* Check role value:
+
+  * must be exactly `admin` or `member`
+  * no uppercase
+
+---
+
+### ❌ Wrong Document IDs
+
+❌ WRONG:
+
+```
+users
+   random123
+```
+
+✔ CORRECT:
+
+```
+users
+   actual_user_uid
+```
+
+---
+
+## Important Concept
+
+Your login works like this:
+
+1. User logs in using Firebase Auth
+2. App gets `user.uid`
+3. App reads:
+
+   ```
+   users/{uid}
+   ```
+4. Checks role
+5. Redirects accordingly
+
+So **UID must match Firestore document ID**
+
+---
+
+## How to Run
+
+1. Download project
+2. Update `firebase-config.js`
+3. Open `index.html`
+4. Login using credentials
+
+---
+
+## Developed By
+
+Sarvagna Teja
